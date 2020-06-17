@@ -13,7 +13,7 @@ import com.eh.testob.testobpingservice.entities.PongResponse;
 public interface PongResponseRepository extends JpaRepository<PongResponse, String> {
 
    @Transactional
-   List<PongResponse> findTop10OrderByResponseTimestamp();
+   List<PongResponse> findTop10ByOrderByIdDesc();
 
 
 }
