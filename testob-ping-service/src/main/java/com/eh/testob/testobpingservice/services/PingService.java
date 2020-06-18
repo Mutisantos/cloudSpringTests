@@ -13,15 +13,18 @@ import com.eh.testob.testobpingservice.proxies.PongServiceProxy;
 import com.eh.testob.testobpingservice.repositories.PongResponseRepository;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
+import lombok.AllArgsConstructor;
+
 @Service
 @EnableCircuitBreaker
+@AllArgsConstructor
 public class PingService {
 
    @Autowired
-   PongServiceProxy pongServiceProxy;
+   private final PongServiceProxy pongServiceProxy;
 
    @Autowired
-   PongResponseRepository pongResponseRepository;
+   private final PongResponseRepository pongResponseRepository;
 
    @HystrixCommand(fallbackMethod = "fallBackResponse")
    public Optional<PongResponse> retrievePongResponse() {

@@ -2,7 +2,9 @@ package com.eh.testobapigateway.prefilter;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
@@ -28,7 +30,7 @@ public class ZuulRoutingFilter extends ZuulFilter {
    public Object run() throws ZuulException {
       HttpServletRequest request = RequestContext.getCurrentContext().getRequest();
       String requestURI = request.getRequestURI();
-      throw new ZuulException(requestURI, 0, requestURI);
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid Endpoint");
    }
 
    @Override

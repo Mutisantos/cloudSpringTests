@@ -13,8 +13,13 @@ import org.springframework.web.server.ResponseStatusException;
 import com.eh.testob.testobpongservice.beans.PongService;
 import com.eh.testob.testobpongservice.beans.PongServiceStatusConfig;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
 @RestController
 @RefreshScope
+@NoArgsConstructor
+@AllArgsConstructor
 public class PongController {
 
    @Autowired

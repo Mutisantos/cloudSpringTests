@@ -11,5 +11,5 @@ import lombok.Setter;
 @ConfigurationProperties("testob-pong-service")
 @Component
 public class PongServiceStatusConfig {
-   private boolean active;
+   private boolean active = true;
 }
