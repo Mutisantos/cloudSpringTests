@@ -4,7 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.stereotype.Service;
 
@@ -14,17 +15,20 @@ import com.eh.testob.testobpingservice.repositories.PongResponseRepository;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 
 @Service
 @EnableCircuitBreaker
 @AllArgsConstructor
 public class PingService {
 
-   @Autowired
+   @NonNull
    private final PongServiceProxy pongServiceProxy;
 
-   @Autowired
+   @NonNull
    private final PongResponseRepository pongResponseRepository;
+
+   private static final Logger logger = LoggerFactory.getLogger(PingService.class);
 
    @HystrixCommand(fallbackMethod = "fallBackResponse")
    public Optional<PongResponse> retrievePongResponse() {
@@ -41,6 +45,7 @@ public class PingService {
 
 
    private Optional<PongResponse> fallBackResponse() {
+      logger.info("Fallback method called");
       return Optional.ofNullable(null);
    }
 
