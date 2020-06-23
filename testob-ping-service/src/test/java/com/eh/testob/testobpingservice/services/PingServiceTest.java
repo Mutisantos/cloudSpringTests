@@ -15,6 +15,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.eh.testob.testobpingservice.dtos.PongResponseDTO;
+import com.eh.testob.testobpingservice.dtos.PongResponseDTO;
 import com.eh.testob.testobpingservice.entities.PongResponse;
 import com.eh.testob.testobpingservice.proxies.PongServiceProxy;
 import com.eh.testob.testobpingservice.repositories.PongResponseRepository;
@@ -41,7 +43,7 @@ public class PingServiceTest {
    @Test
    public void retrievePongResponseTest() {
       Mockito.when(pongServiceProxy.retrievePongMessage()).thenReturn(RESPONSE_MESSAGE);
-      Optional<PongResponse> response = pingService.retrievePongResponse();
+      Optional<PongResponseDTO> response = pingService.retrievePongResponse();
       assertEquals(RESPONSE_MESSAGE, response.get().getJsonResponse());
    }
 
@@ -49,7 +51,7 @@ public class PingServiceTest {
    public void retrieveTop10ResponsesTest() {
       Mockito.when(pongResponseRepository.findTop10ByOrderByIdDesc()).thenReturn(Collections.singletonList(
             PongResponse.builder().jsonResponse(RESPONSE_MESSAGE).responseTimestamp(new Date()).build()));
-      List<PongResponse> top10Responses = pingService.retrieveTop10Responses();
+      List<PongResponseDTO> top10Responses = pingService.retrieveTop10Responses();
       assertNotNull(top10Responses);
       assertEquals(RESPONSE_MESSAGE, top10Responses.stream().findFirst().get().getJsonResponse());
    }

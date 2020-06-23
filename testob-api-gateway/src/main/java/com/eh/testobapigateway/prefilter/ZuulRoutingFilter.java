@@ -18,12 +18,12 @@ public class ZuulRoutingFilter extends ZuulFilter {
 
    @Override
    public boolean shouldFilter() {
-      HttpServletRequest request = RequestContext.getCurrentContext().getRequest();
-      String requestURI = request.getRequestURI();
-      if (requestURI.contains(TESTOB_PING_SERVICE)) {
-         return false;
-      }
-      return true;
+      // HttpServletRequest request = RequestContext.getCurrentContext().getRequest();
+      // String requestURI = request.getRequestURI();
+      // if (requestURI.contains(TESTOB_PING_SERVICE)) {
+      // return false;
+      // }
+      return false;
    }
 
    @Override

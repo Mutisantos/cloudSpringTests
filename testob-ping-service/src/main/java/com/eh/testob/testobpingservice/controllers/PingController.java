@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.eh.testob.testobpingservice.entities.PongResponse;
+import com.eh.testob.testobpingservice.dtos.PongResponseDTO;
 import com.eh.testob.testobpingservice.exceptions.FallbackException;
 import com.eh.testob.testobpingservice.services.PingService;
 
@@ -26,7 +26,7 @@ public class PingController {
 
    private static final Logger logger = LoggerFactory.getLogger(PingController.class);
 
-   private final Function<PongResponse, Response> generateEndpointResponse = pongResponse -> {
+   private final Function<PongResponseDTO, Response> generateEndpointResponse = pongResponse -> {
       logger.info("Message {} saved", pongResponse);
       return Response.status(Status.OK).entity(String.format(TIMESTAMP_EPOCH, pongResponse.getResponseTimestamp()
             .getTime()))
@@ -43,7 +43,7 @@ public class PingController {
 
    @GetMapping(path = "/top10")
    public Response retriveTop10PingResponses() {
-      List<PongResponse> pongResponses = pingService.retrieveTop10Responses();
+      List<PongResponseDTO> pongResponses = pingService.retrieveTop10Responses();
       return Response.status(Status.OK).entity(pongResponses).build();
    }
 }

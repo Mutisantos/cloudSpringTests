@@ -18,7 +18,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.eh.testob.testobpingservice.entities.PongResponse;
+import com.eh.testob.testobpingservice.dtos.PongResponseDTO;
+import com.eh.testob.testobpingservice.exceptions.FallbackException;
 import com.eh.testob.testobpingservice.services.PingService;
 
 @ExtendWith(SpringExtension.class)
@@ -37,10 +38,10 @@ public class PingControllerTest {
    }
 
    @Test
-   public void retrieveFromPingServiceTest() {
+   public void retrieveFromPingServiceTest() throws FallbackException {
       Mockito.when(pingService.retrievePongResponse())
       .thenReturn(Optional
-            .of(PongResponse.builder().jsonResponse(RESPONSE_MESSAGE).responseTimestamp(new Date()).build()));
+            .of(PongResponseDTO.builder().jsonResponse(RESPONSE_MESSAGE).responseTimestamp(new Date()).build()));
       Response response = pingController.retrieveFromPingService();
       assertNotNull(response.getEntity());
    }
@@ -58,9 +59,9 @@ public class PingControllerTest {
    @Test
    public void retriveTop10PingResponsesTest() {
       Mockito.when(pingService.retrieveTop10Responses()).thenReturn(Collections.singletonList(
-            PongResponse.builder().jsonResponse(RESPONSE_MESSAGE).responseTimestamp(new Date()).build()));
+            PongResponseDTO.builder().jsonResponse(RESPONSE_MESSAGE).responseTimestamp(new Date()).build()));
       Response response = pingController.retriveTop10PingResponses();
-      List<PongResponse> top10Responses = (List<PongResponse>) response.getEntity();
+      List<PongResponseDTO> top10Responses = (List<PongResponseDTO>) response.getEntity();
       assertNotNull(top10Responses);
       assertEquals(RESPONSE_MESSAGE, top10Responses.stream().findFirst().get().getJsonResponse());
    }
