@@ -8,14 +8,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import javax.ws.rs.core.Response;
-
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.eh.testob.testobpingservice.dtos.PongResponseDTO;
@@ -27,30 +26,26 @@ public class PingControllerTest {
 
    private static final String RESPONSE_MESSAGE = "{message:A|B|C|D}";
 
-   private PingController pingController;
-
    @Mock
    private PingService pingService;
 
-   @BeforeEach
-   public void setUp() {
-      pingController = new PingController(pingService);
-   }
+   @InjectMocks
+   private PingController pingController;
 
    @Test
    public void retrieveFromPingServiceTest() throws FallbackException {
       Mockito.when(pingService.retrievePongResponse())
       .thenReturn(Optional
             .of(PongResponseDTO.builder().jsonResponse(RESPONSE_MESSAGE).responseTimestamp(new Date()).build()));
-      Response response = pingController.retrieveFromPingService();
-      assertNotNull(response.getEntity());
+      ResponseEntity response = pingController.retrieveFromPingService();
+      assertNotNull(response.getBody());
    }
 
    @Test
    public void retrieveFromPingServiceTestException() {
       Mockito.when(pingService.retrievePongResponse())
       .thenReturn(Optional.ofNullable(null));
-      IllegalStateException expectedException = Assertions.assertThrows(IllegalStateException.class, () -> {
+      FallbackException expectedException = Assertions.assertThrows(FallbackException.class, () -> {
          pingController.retrieveFromPingService();
       });
       assertNotNull(expectedException);
@@ -60,8 +55,8 @@ public class PingControllerTest {
    public void retriveTop10PingResponsesTest() {
       Mockito.when(pingService.retrieveTop10Responses()).thenReturn(Collections.singletonList(
             PongResponseDTO.builder().jsonResponse(RESPONSE_MESSAGE).responseTimestamp(new Date()).build()));
-      Response response = pingController.retriveTop10PingResponses();
-      List<PongResponseDTO> top10Responses = (List<PongResponseDTO>) response.getEntity();
+      ResponseEntity response = pingController.retriveTop10PingResponses();
+      List<PongResponseDTO> top10Responses = (List<PongResponseDTO>) response.getBody();
       assertNotNull(top10Responses);
       assertEquals(RESPONSE_MESSAGE, top10Responses.stream().findFirst().get().getJsonResponse());
    }

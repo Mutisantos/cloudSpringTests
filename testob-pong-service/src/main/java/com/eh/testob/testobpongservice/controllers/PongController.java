@@ -1,11 +1,11 @@
 package com.eh.testob.testobpongservice.controllers;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -29,9 +29,10 @@ public class PongController {
    private PongServiceStatusConfig serviceStatusConfig;
 
    @GetMapping(path = "/pong")
-   public Response retrieveRandomValues() {
+   public ResponseEntity<String> retrieveRandomValues() {
       if (serviceStatusConfig.isActive()) {
-         return Response.status(Status.OK).entity(pongService.pongResponseGenerator()).build();
+         return ResponseEntity.status(HttpStatus.OK).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+               .body(pongService.pongResponseGenerator());
       } else {
          throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "Randomizer Config Disabled");
       }
